@@ -1,8 +1,17 @@
+html{
+  max-width:1000px;
+}
 body {
-background-color: #555;
-margin: 0px;
-padding: 0px;
-cursor:none;
+  background-color: #555;
+  margin: 0px;
+  padding: 0px;
+  overflow:hidden;
+  cursor: none;
+}
+
+#container{
+  position:absolute;
+  width:1000px;
 }
 
 #darkness{
@@ -19,9 +28,9 @@ cursor:none;
 }
 
 #darknessRight{
-    background-color: black;
-    position:absolute;
-    height: 100%;
+  background-color: black;
+  position:absolute;
+  height: 100%;
 }
 
 #darknessTop{
