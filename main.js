@@ -1,4 +1,6 @@
 $(function(){
+  var self = this;
+  self.zoomCheck = document.documentElement.clientWidth;
   //Below function found at
   //http://stackoverflow.com/questions/18546067/why-is-the-window-width-smaller-than-the-viewport-width-set-in-media-queries
   var spotLightCounter = 0;
@@ -12,6 +14,11 @@ $(function(){
   }
 
   function checkCollision(){
+    var zoom = document.documentElement.clientWidth;
+    console.log(zoom);
+    console.log(self.zoomCheck);
+    if(zoom != self.zoomCheck)
+      reset();
     var spotTop = $("#spotlightCover").position().top;
     var spotLeft = $("#spotlightCover").position().left;
     var dogeCollTop = $("#dogeMeme").position().top;
@@ -40,9 +47,15 @@ $(function(){
       else{
         spotLightCounter = 0;
       }
-      if(spotLightCounter > 50){
-        console.log("Found!");
+      if(spotLightCounter > 20){
+        gameOver();
       }
+  }
+
+  function gameOver(){
+    $("#dogeMeme").fadeOut("slow", function(){
+      $(".centerAbs").fadeIn(2000);
+    });
   }
 
   var vpWidth = viewport().width;
@@ -55,35 +68,60 @@ $(function(){
   $("#dogeMeme").css("left", dogeLeft);
 
   $(window).resize(function(){
+    reset();
+  }); // window resize listener
+
+  $("#goAgain").click(function(){
+    reset();
+  });
+
+  function reset(){
     vpWidth = viewport().width;
     vpHeight = viewport().height;
     dogeTop = Math.floor(Math.random()*(vpHeight - $("#dogeMeme").height()));
     dogeLeft = Math.floor(Math.random()*(vpWidth - $("#dogeMeme").width()));
     $("#dogeMeme").css("top", dogeTop);
     $("#dogeMeme").css("left", dogeLeft);
-  }); // window resize listener
+    $(".centerAbs").hide();
+    $("#dogeMeme").show();
+    self.zoomCheck = document.documentElement.clientWidth;
+  }
 
   //check collision
-  var collisionDetector = window.setInterval(checkCollision, 1)
+  var collisionDetector = window.setInterval(checkCollision, 10)
 
   $("body").mouseenter(function(event){
+    console.log("hide");
     $("#darkness").hide();
+    $("#spotlight").show();
+    $("#spotlight").css("top", event.pageY);
+    $("#spotlight").css("left", event.pageX);
+    $("#spotlightCover").css("top", event.pageY - 7);
+    $("#spotlightCover").css("left", event.pageX - 7);
+    $("#darknessLeft").css("right",(vpWidth -event.pageX));
+    $("#darknessLeft").css("width", event.pageX);
+    $("#darknessRight").css("width", (vpWidth - event.pageX) - $("#spotlight").width());
+    $("#darknessRight").css("left", event.pageX + $("#spotlight").width());
+    $("#darknessTop").css("height", event.pageY);
+    $("#darknessTop").css("left", event.pageX);
+    $("#darknessBottom").css("height", vpHeight - event.pageY - $("#spotlight").height());
+    $("#darknessBottom").css("left", event.pageX);
   });// end mouse enter
 
   $("body").mousemove(function(event){
-      $("#spotlight").show();
-      $("#spotlight").css("top", event.pageY);
-      $("#spotlight").css("left", event.pageX);
-      $("#spotlightCover").css("top", event.pageY - 7);
-      $("#spotlightCover").css("left", event.pageX - 7);
-      $("#darknessLeft").css("right",(vpWidth -event.pageX));
-      $("#darknessLeft").css("width", event.pageX);
-      $("#darknessRight").css("width", (vpWidth - event.pageX) - $("#spotlight").width());
-      $("#darknessRight").css("left", event.pageX + $("#spotlight").width());
-      $("#darknessTop").css("height", event.pageY);
-      $("#darknessTop").css("left", event.pageX);
-      $("#darknessBottom").css("height", vpHeight - event.pageY - $("#spotlight").height());
-      $("#darknessBottom").css("left", event.pageX);
+    $("#spotlight").show();
+    $("#spotlight").css("top", event.pageY);
+    $("#spotlight").css("left", event.pageX);
+    $("#spotlightCover").css("top", event.pageY - 7);
+    $("#spotlightCover").css("left", event.pageX - 7);
+    $("#darknessLeft").css("right",(vpWidth -event.pageX));
+    $("#darknessLeft").css("width", event.pageX);
+    $("#darknessRight").css("width", (vpWidth - event.pageX) - $("#spotlight").width());
+    $("#darknessRight").css("left", event.pageX + $("#spotlight").width());
+    $("#darknessTop").css("height", event.pageY);
+    $("#darknessTop").css("left", event.pageX);
+    $("#darknessBottom").css("height", vpHeight - event.pageY - $("#spotlight").height());
+    $("#darknessBottom").css("left", event.pageX);
   });//end mouse move
 
   $("body").mouseleave(function(event){
